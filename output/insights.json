@@ -1,0 +1,49 @@
+{
+    "zero_shot_results": {
+        "anomalies_day_8": [
+            {
+                "zone": "Z_C2",
+                "value": 1540,
+                "deviation": "Alta"
+            },
+            {
+                "zone": "Z_CK",
+                "value": 639,
+                "deviation": "Alta"
+            },
+            {
+                "zone": "Z_E2",
+                "value0:1547,8.0],[-10,-10,-10]],[-10,-10,-10]]}},{": -360,
+                "-360, -360,": ""
+            }
+        ]
+    },
+    "few_shot_results": {
+        "metrics": {
+            "total_visitors": 4938,
+            "unique_visitors": 2715,
+            "average_session_duration": 6.02,
+            "conversion_rate": 0.8197228575272434,
+            "funnel_profiles": {
+                "F_adult": 82.4198330965909,
+                "M_adult": 83.55565425957182,
+                "top_drop_profile": [
+                    "Adultos/Seniores"
+                ]
+            },
+            "anomalies_day_7": [
+                {
+                    "zone": "Z_C1",
+                    "value": 1403,
+                    "deviation": "Alta"
+                },
+                {
+                    "zone": "Z_CK",
+                    "value": 522,
+                    "deviation": "Alta"
+                }
+            ],
+            "peak_hour": "17:00"
+        }
+    }
+}
