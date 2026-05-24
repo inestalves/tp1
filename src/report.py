@@ -21,10 +21,10 @@ def generate_markdown(input_file, output_file, metrics_file='output/metrics.json
         zones = metrics.get('zones', {})
         real_peak_hour = metrics.get('peak_hour', '17:00')
 
-        # Identificar a zona com maior tráfego real via código
+        # Identificar a zona com maior tráfego real
         top_zone_id = max(zones, key=lambda x: zones[x].get('total_traffic', 0)) if zones else "Z_C2"
 
-        # --- 1. RESUMO EXECUTIVO (Limpeza de redundâncias) ---
+        # Resumo executivo
         resumo_raw = data.get('resumo_executivo', [])
         resumo_limpo = []
         for item in resumo_raw:
@@ -37,7 +37,7 @@ def generate_markdown(input_file, output_file, metrics_file='output/metrics.json
             txt = re.sub(r'\d{1,2}h', real_peak_hour, txt)
             resumo_limpo.append(txt)
 
-        md = f"# 🏪 Relatório Semanal de Performance de Loja\n"
+        md = f"#  Relatório Semanal de Performance de Loja\n"
         md += f"*Gerado em: {datetime.now().strftime('%d/%m/%Y')}*\n\n"
 
         md += "## 1. Resumo Executivo\n"
@@ -45,7 +45,7 @@ def generate_markdown(input_file, output_file, metrics_file='output/metrics.json
             md += f"* {item}\n"
         md += "\n---\n"
 
-        # --- 2. PERFORMANCE DE TRÁFEGO ---
+        # Performance de tráfego
         daily_data = traffic.get('unique_visitors_per_day', {})
         dia_mais = max(daily_data, key=daily_data.get) if daily_data else "N/A"
         md += "## 2. Performance de Tráfego\n"
@@ -53,7 +53,7 @@ def generate_markdown(input_file, output_file, metrics_file='output/metrics.json
         md += f"* **Hora de Pico:** {real_peak_hour}.\n"
         md += f"* **Dia mais movimentado:** {dia_mais}.\n\n"
 
-        # --- 3. ANÁLISE DE ZONAS (Correção de IDs técnicos) ---
+        # Análise de zonas
         md += "## 3. Análise de Zonas\n"
         md += "### Top 3 Zonas (Desempenho)\n"
         for code, info in sorted(zones.items(), key=lambda x: x[1].get('total_traffic', 0), reverse=True)[:3]:
@@ -76,21 +76,21 @@ def generate_markdown(input_file, output_file, metrics_file='output/metrics.json
             md += f"* **Hipótese:** {ins.get('implicacao')}\n"
             md += f"* **Ação:** {rec}\n\n"
 
-        # --- 4. FUNIL DE CLIENTES ---
+        # Funil de clientes
         md += "## 4. Funil de Clientes\n"
         conv = metrics.get('funnel', {}).get('conversion_to_checkout', 0)
         md += f"Taxa de Conversão: **{conv * 100:.1f}%**.\n"
         md += f"* **Ponto de Perda:** Identificou-se que **{(1 - conv) * 100:.1f}%** dos visitantes abandonam a jornada.\n"
         md += f"* **Perfil:** {metrics.get('demographics', {}).get('top_drop_profile', 'Adultos/Seniores')}.\n\n"
 
-        # --- 5. ANOMALIAS ---
+        # Anomalias
         md += "## 5. Anomalias da Semana\n"
         for a in metrics.get('anomalies_day_7', [])[:3]:
             md += f"### Evento em {a.get('zone')}\n"
             md += f"* **Magnitude:** Desvio {a.get('deviation')}.\n"
             md += f"* **Ação:** Inspeção técnica e verificação de hardware.\n\n"
 
-        # --- 6. RECOMENDAÇÕES (Sincronizadas) ---
+        # Recomendações
         md += "\n## 6. Recomendações (Prioridade)\n"
         final_recs = []
         for ins in sorted(data.get('insights', []),

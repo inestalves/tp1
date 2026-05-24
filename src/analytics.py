@@ -12,7 +12,7 @@ def run_analytics(input_file, output_metrics):
 
     metrics = {}
 
-    # --- tráfego ---
+    # tráfego
     total_unique = int(df['person_id'].nunique())
     metrics['traffic'] = {
         'unique_visitors_per_day':  df.groupby('visit_date')['person_id'].nunique().to_dict(),
@@ -22,7 +22,7 @@ def run_analytics(input_file, output_metrics):
         'total_visitors': total_unique
     }
 
-    # --- top 10 sequências de 3 zonas ---
+    # top 10 sequências de 3 zonas
     paths = df.sort_values(['person_id', 'entry_time']).groupby('person_id')['zone_id'].apply(list)
     sequences = []
     for p in paths:
@@ -30,7 +30,7 @@ def run_analytics(input_file, output_metrics):
             sequences.append(f"{p[i]} -> {p[i+1]} -> {p[i+2]}")
     metrics['top_10_sequences'] = pd.Series(sequences).value_counts().head(10).to_dict()
 
-    # --- métricas por zona ---
+    # métricas por zona
     zone_metrics = {}
     for zone in df['zone_id'].unique():
         zone_df = df[df['zone_id'] == zone]
@@ -43,7 +43,7 @@ def run_analytics(input_file, output_metrics):
         }
     metrics['zones'] = zone_metrics
 
-    # --- funil e perfil de abandono ---
+    # funil e perfil de abandono
     # Conversão para caixa: visitantes que passaram por Z_C* ou Z_CK
     checkout_zones   = df['zone_id'].str.startswith('Z_C') | (df['zone_id'] == 'Z_CK')
     checkout_persons = df[checkout_zones]['person_id'].unique()
@@ -66,7 +66,7 @@ def run_analytics(input_file, output_metrics):
         }
     }
 
-    # --- demografia ---
+    # demografia
     dwell_seg = df.groupby(['gender', 'age_range'])['dwell_s'].mean().to_dict()
     # demografia por hora
     demo_hour = df.groupby(['hour_of_day', 'gender'])['person_id'].nunique().unstack(fill_value=0)
@@ -81,10 +81,8 @@ def run_analytics(input_file, output_metrics):
         'top_drop_profile':    "Adultos/Seniores"
     }
 
-    # --- deteção de anomalias por (zona, hora) ---
-    # Enunciado: baseline = dias 1-6, teste = dia 7
+    # deteção de anomalias por (zona, hora)
     # Comparar visitantes únicos por (zone_id, hour_of_day) no dia 7
-    # com média ± 2σ da mesma (zone_id, hour_of_day) nos dias 1-6
     days = sorted(df['visit_date'].unique())
     metrics['anomalies_day_7'] = []
 
@@ -95,8 +93,6 @@ def run_analytics(input_file, output_metrics):
         train_data = df[df['visit_date'].isin(training_days)]
         test_data  = df[df['visit_date'] == test_day]
 
-        # Baseline: visitantes únicos por (zone_id, hour_of_day, visit_date) nos dias 1-6
-        # depois agg mean/std por (zone_id, hour_of_day) — uma observação por dia
         baseline = (
             train_data
             .groupby(['zone_id', 'hour_of_day', 'visit_date'])['person_id']
@@ -135,7 +131,7 @@ def run_analytics(input_file, output_metrics):
             key=lambda x: abs(x['value'] - x['baseline_mean']), reverse=True
         )
 
-    # --- pico horário ---
+    # pico horário
     metrics['peak_hour'] = str(df.groupby('hour_of_day')['person_id'].nunique().idxmax()) + ":00"
 
     with open(output_metrics, 'w', encoding='utf-8') as f:

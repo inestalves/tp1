@@ -5,14 +5,11 @@ import argparse
 
 
 def repair_json(raw, strategy):
-    """Tenta reparar JSON malformado gerado pelo LLM."""
-    # Tentativa 1: parse direto
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
         pass
 
-    # Tentativa 2: truncar no último ']}' que fecha o array de insights
     last_valid = raw.rfind(']}')
     if last_valid != -1:
         try:
@@ -22,11 +19,9 @@ def repair_json(raw, strategy):
         except json.JSONDecodeError:
             pass
 
-    # Tentativa 3: extrair apenas o array de insights via regex
     match = re.search(r'"insights"\s*:\s*(\[.*)', raw, re.DOTALL)
     if match:
         insights_raw = match.group(1)
-        # Fechar colchete se incompleto
         open_b  = insights_raw.count('[')
         close_b = insights_raw.count(']')
         if open_b > close_b:
@@ -79,7 +74,7 @@ def run_pipeline(input_file, output_file):
         print(f"Erro: {e}")
         return
 
-    # Lê prompts separados — fallback para ficheiro único se não existirem
+    # Lê prompts separados
     for name, fname in [('zero_shot', 'prompts/zero_shot.txt'), ('few_shot', 'prompts/few_shot.txt')]:
         try:
             with open(fname, 'r', encoding='utf-8') as f:

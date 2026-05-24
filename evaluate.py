@@ -95,12 +95,9 @@ def metric_consistency(journeys: pd.DataFrame) -> dict:
 
 def metric_coverage(events: pd.DataFrame, journeys: pd.DataFrame) -> dict:
     """
-    Cobertura vectorizada: para cada evento, verifica se existe uma visita
+    Para cada evento, verifica se existe uma visita
     com a mesma zona+atributos cujo intervalo [entry_time, exit_time] contém
     o timestamp do evento.
-
-    Complexidade: O(n log n) graças ao merge vectorizado,
-    em vez do O(n²) da versão iterativa anterior.
     """
     ev = events[['timestamp', 'zone_id', 'gender', 'age_range']].copy()
     ev['timestamp'] = pd.to_datetime(ev['timestamp'])
@@ -355,7 +352,7 @@ def main() -> None:
 
     if args.evaluate_only:
         check_outputs(paths, need_events=not args.skip_coverage)
-        print("Modo --evaluate-only: a usar outputs existentes (sem pipeline nem Ollama).")
+        print("Modo --evaluate-only: a usar outputs existentes.")
     else:
         events_path = resolve_path(args.data, ROOT / "data" / "events.csv")
         paths = run_pipeline(events_path, run_llm=not args.skip_llm)
@@ -373,11 +370,11 @@ def main() -> None:
     }
 
     if args.skip_coverage:
-        phase1["coverage"] = {"skipped": True, "reason": "Use sem --skip-coverage se precisares desta métrica."}
+        phase1["coverage"] = {"skipped": True, "reason": "Nâo disponíveç"}
     else:
         if not events_path.exists():
             raise FileNotFoundError(f"events.csv em falta para cobertura: {events_path}")
-        print("A calcular cobertura (merge vectorizado)...")
+        print("A calcular cobertura...")
         events = pd.read_csv(events_path)
         events["timestamp"] = pd.to_datetime(events["timestamp"])
         phase1["coverage"] = metric_coverage(events, journeys)
