@@ -1,49 +1,141 @@
 {
     "zero_shot_results": {
-        "anomalies_day_8": [
+        "insights": [
             {
-                "zone": "Z_C2",
-                "value": 1540,
-                "deviation": "Alta"
+                "id": "INS_001",
+                "categoria": "anomalia",
+                "titulo": "Zona Z_C2 apresenta alta atividade às 21h",
+                "observacao": "A zona Z_C2 registrou 38 visitantes às 21h, quando a média baseline é de 13.3.",
+                "implicacao": "Pode indicar uma concentração de clientes em busca de produtos específicos.",
+                "recomendacao": "Monitorar a oferta e demanda de produtos na zona Z_C2.",
+                "urgencia": "imediata",
+                "confianca": 0.9
             },
             {
-                "zone": "Z_CK",
-                "value": 639,
-                "deviation": "Alta"
+                "id": "INS_002",
+                "categoria": "anomalia",
+                "titulo": "Zona Z_E2 apresenta alta atividade às 20h",
+                "observacao": "A zona Z_E2 registrou 47 visitantes às 20h, quando a média baseline é de 30.0.",
+                "implicacao": "Pode indicar uma concentração de clientes em busca de serviços específicos.",
+                "recomendacao": "Monitorar a oferta e demanda de serviços na zona Z_E2.",
+                "urgencia": "imediata",
+                "confianca": 0.9
             },
             {
-                "zone": "Z_E2",
-                "value0:1547,8.0],[-10,-10,-10]],[-10,-10,-10]]}},{": -360,
-                "-360, -360,": ""
+                "id": "INS_003",
+                "categoria": "zona",
+                "titulo": "Zona Z_C1 tem maior tráfego de visitantes",
+                "observacao": "A zona Z_C1 registrou 8339 visitantes, o que é 45% do total de visitantes.",
+                "implicacao": "Pode indicar uma concentração de clientes em busca de produtos específicos.",
+                "recomendacao": "Monitorar a oferta e demanda de produtos na zona Z_C1.",
+                "urgencia": "esta_semana",
+                "confianca": 0.8
+            },
+            {
+                "id": "INS_004",
+                "categoria": "zona",
+                "titulo": "Zona Z_N10 tem maior tempo médio de permanência",
+                "observacao": "A zona Z_N10 registrou um tempo médio de permanência de 198.23002754820936 minutos.",
+                "implicacao": "Pode indicar uma concentração de clientes em busca de produtos específicos.",
+                "recomendacao": "Monitorar a oferta e demanda de produtos na zona Z_N10.",
+                "urgencia": "esta_semana",
+                "confianca": 0.8
+            },
+            {
+                "id": "INS_005",
+                "categoria": "demografico",
+                "titulo": "Adultos/Seniores são o perfil mais comum de clientes que abandonam a loja",
+                "observacao": "O perfil mais comum de clientes que abandonam a loja é Adultos/Seniores.",
+                "implicacao": "Pode indicar uma necessidade de ajustes na oferta e experiência do cliente.",
+                "recomendacao": "Monitorar a oferta e demanda de produtos para o perfil Adultos/Seniores.",
+                "urgencia": "proximo_mes",
+                "confianca": 0.7
+            },
+            {
+                "id": "INS_006",
+                "categoria": "funil",
+                "titulo": "Taxa de conversão para checkout é baixa",
+                "observacao": "A taxa de conversão para checkout é de 81,97%, o que pode indicar uma necessidade de ajustes na experiência do cliente.",
+                "implicacao": "Pode indicar uma necessidade de ajustes na oferta e experiência do cliente.",
+                "recomendacao": "Monitorar a oferta e demanda de produtos para melhorar a taxa de conversão.",
+                "urgencia": "esta_semana",
+                "confianca": 0.8
             }
+        ],
+        "resumo_executivo": [
+            "A zona Z_C2 apresentou alta atividade às 21h, o que pode indicar uma concentração de clientes em busca de produtos específicos.",
+            "A zona Z_E2 apresentou alta atividade às 20h, o que pode indicar uma concentração de clientes em busca de serviços específicos.",
+            "A zona Z_C1 tem maior tráfego de visitantes e pode indicar uma concentração de clientes em busca de produtos específicos.",
+            "A zona Z_N10 tem maior tempo médio de permanência e pode indicar uma concentração de clientes em busca de produtos específicos."
         ]
     },
     "few_shot_results": {
-        "metrics": {
-            "total_visitors": 4938,
-            "unique_visitors": 2715,
-            "average_session_duration": 6.02,
-            "conversion_rate": 0.8197228575272434,
-            "funnel_profiles": {
-                "F_adult": 82.4198330965909,
-                "M_adult": 83.55565425957182,
-                "top_drop_profile": [
-                    "Adultos/Seniores"
-                ]
+        "insights": [
+            {
+                "id": "INS_001",
+                "categoria": "anomalia",
+                "titulo": "Z_N4 com 0 visitantes às 16h — possível obstrução",
+                "observacao": "No domingo às 16h, Z_N4 registou 0 visitantes contra média de 23 nos dias anteriores.",
+                "implicacao": "Verificar sinalização e acesso físico à zona Z_N4 na próxima abertura.",
+                "recomendacao": "Verificar sinalização e acesso físico à zona Z_N4",
+                "urgencia": "imediata",
+                "confianca": 0.9
             },
-            "anomalies_day_7": [
-                {
-                    "zone": "Z_C1",
-                    "value": 1403,
-                    "deviation": "Alta"
-                },
-                {
-                    "zone": "Z_CK",
-                    "value": 522,
-                    "deviation": "Alta"
-                }
-            ],
-            "peak_hour": "17:00"
-        }
+            {
+                "id": "INS_002",
+                "categoria": "anomalia",
+                "titulo": "Z_C2 com tráfego 38% acima da média às 21h",
+                "observacao": "No domingo às 21h, Z_C2 registou 38 visitantes contra média de 13.3 nos dias anteriores.",
+                "implicacao": "Verificar causa do aumento do tráfego em Z_C2.",
+                "recomendacao": "Verificar causa do aumento do tráfego",
+                "urgencia": "imediata",
+                "confianca": 0.9
+            },
+            {
+                "id": "INS_003",
+                "categoria": "anomalia",
+                "titulo": "Z_C1 com tráfego 31% acima da média às 21h",
+                "observacao": "No domingo às 21h, Z_C1 registou 31 visitantes contra média de 11.8 nos dias anteriores.",
+                "implicacao": "Verificar causa do aumento do tráfego em Z_C1.",
+                "recomendacao": "Verificar causa do aumento do tráfego",
+                "urgencia": "imediata",
+                "confianca": 0.9
+            },
+            {
+                "id": "INS_004",
+                "categoria": "anomalia",
+                "titulo": "Z_E2 com tráfego 47% acima da média às 20h",
+                "observacao": "No domingo às 20h, Z_E2 registou 47 visitantes contra média de 30.0 nos dias anteriores.",
+                "implicacao": "Verificar causa do aumento do tráfego em Z_E2.",
+                "recomendacao": "Verificar causa do aumento do tráfego",
+                "urgencia": "imediata",
+                "confianca": 0.9
+            },
+            {
+                "id": "INS_005",
+                "categoria": "anomalia",
+                "titulo": "Z_S1 com tráfego 26% acima da média às 14h",
+                "observacao": "No domingo às 14h, Z_S1 registou 26 visitantes contra média de 10.3 nos dias anteriores.",
+                "implicacao": "Verificar causa do aumento do tráfego em Z_S1.",
+                "recomendacao": "Verificar causa do aumento do tráfego",
+                "urgencia": "imediata",
+                "confianca": 0.9
+            },
+            {
+                "id": "INS_006",
+                "categoria": "anomalia",
+                "titulo": "Z_N1 com tráfego 32% acima da média às 14h",
+                "observacao": "No domingo às 14h, Z_N1 registou 32 visitantes contra média de 17.2 nos dias anteriores.",
+                "implicacao": "Verificar causa do aumento do tráfego em Z_N1.",
+                "recomendacao": "Verificar causa do aumento do tráfego",
+                "urgencia": "imediata",
+                "confianca": 0.9
+            }
+        ],
+        "resumo_executivo": [
+            "Z_N4 registrou 0 visitantes às 16h, possivelmente devido a obstrução.",
+            "Z_C2, Z_C1 e Z_E2 registraram tráfego acima da média às 21h, 21h e 20h respectivamente.",
+            "Z_S1 e Z_N1 registraram tráfego acima da média às 14h."
+        ]
     }
 }

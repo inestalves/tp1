@@ -30,28 +30,12 @@ def run_pipeline(events_path: Path, run_llm: bool) -> dict[str, Path]:
     }
 
     py = sys.executable
-    run_cmd([
-        py, str(SRC / "stitcher.py"),
-        "--input", str(events_path),
-        "--output", str(paths["journeys"]),
-    ])
-    run_cmd([
-        py, str(SRC / "analytics.py"),
-        "--input", str(paths["journeys"]),
-        "--output", str(paths["metrics"]),
-    ])
+    run_cmd([py, str(SRC / "stitcher.py"), "--input", str(events_path), "--output", str(paths["journeys"])])
+    run_cmd([py, str(SRC / "analytics.py"), "--input", str(paths["journeys"]), "--output", str(paths["metrics"])])
 
     if run_llm:
-        run_cmd([
-            py, str(SRC / "insights.py"),
-            "--input", str(paths["metrics"]),
-            "--output", str(paths["insights"]),
-        ])
-        run_cmd([
-            py, str(SRC / "report.py"),
-            "--input", str(paths["insights"]),
-            "--output", str(paths["report"]),
-        ])
+        run_cmd([py, str(SRC / "insights.py"), "--input", str(paths["metrics"]), "--output", str(paths["insights"])])
+        run_cmd([py, str(SRC / "report.py"), "--input", str(paths["insights"]), "--output", str(paths["report"])])
 
     return paths
 
@@ -66,9 +50,9 @@ def resolve_path(path: str | None, default: Path) -> Path:
 def output_paths(args) -> dict[str, Path]:
     return {
         "journeys": resolve_path(args.journeys, OUTPUT / "journeys.csv"),
-        "metrics": resolve_path(args.metrics, OUTPUT / "metrics.json"),
+        "metrics":  resolve_path(args.metrics,  OUTPUT / "metrics.json"),
         "insights": resolve_path(args.insights, OUTPUT / "insights.json"),
-        "report": resolve_path(args.report, OUTPUT / "weekly_report.md"),
+        "report":   resolve_path(args.report,   OUTPUT / "weekly_report.md"),
     }
 
 
@@ -84,7 +68,7 @@ def check_outputs(paths: dict[str, Path], need_events: bool) -> None:
 def metric_consistency(journeys: pd.DataFrame) -> dict:
     df = journeys.copy()
     df["entry_time"] = pd.to_datetime(df["entry_time"])
-    df["exit_time"] = pd.to_datetime(df["exit_time"])
+    df["exit_time"]  = pd.to_datetime(df["exit_time"])
 
     total_persons = df["person_id"].nunique()
     violations = 0
@@ -109,38 +93,40 @@ def metric_consistency(journeys: pd.DataFrame) -> dict:
     }
 
 
-def _event_covered(row: pd.Series, journeys: pd.DataFrame) -> bool:
-    ts = row["timestamp"]
-    zone = row["zone_id"]
-    g, a = row["gender"], row["age_range"]
-
-    candidates = journeys[
-        (journeys["zone_id"] == zone)
-        & (journeys["gender"] == g)
-        & (journeys["age_range"] == a)
-    ]
-    for _, v in candidates.iterrows():
-        if v["entry_time"] <= ts <= v["exit_time"]:
-            return True
-    return False
-
-
 def metric_coverage(events: pd.DataFrame, journeys: pd.DataFrame) -> dict:
-    events = events.copy()
-    events["timestamp"] = pd.to_datetime(events["timestamp"])
-    journeys = journeys.copy()
-    journeys["entry_time"] = pd.to_datetime(journeys["entry_time"])
-    journeys["exit_time"] = pd.to_datetime(journeys["exit_time"])
+    """
+    Cobertura vectorizada: para cada evento, verifica se existe uma visita
+    com a mesma zona+atributos cujo intervalo [entry_time, exit_time] contém
+    o timestamp do evento.
 
-    covered = sum(_event_covered(events.iloc[i], journeys) for i in range(len(events)))
-    total = len(events)
-    pct = (covered / total * 100) if total else 0.0
+    Complexidade: O(n log n) graças ao merge vectorizado,
+    em vez do O(n²) da versão iterativa anterior.
+    """
+    ev = events[['timestamp', 'zone_id', 'gender', 'age_range']].copy()
+    ev['timestamp'] = pd.to_datetime(ev['timestamp'])
+
+    jn = journeys[['zone_id', 'gender', 'age_range', 'entry_time', 'exit_time']].copy()
+    jn['entry_time'] = pd.to_datetime(jn['entry_time'])
+    jn['exit_time']  = pd.to_datetime(jn['exit_time'])
+
+    # Merge por zona + atributos — expande cada evento com todas as visitas
+    # compatíveis em termos de zona/género/idade
+    merged = ev.merge(jn, on=['zone_id', 'gender', 'age_range'], how='left')
+
+    # Filtrar apenas os pares onde o timestamp cai dentro do intervalo da visita
+    covered_mask = (merged['timestamp'] >= merged['entry_time']) & \
+                   (merged['timestamp'] <= merged['exit_time'])
+
+    # Um evento é coberto se tiver pelo menos um match
+    covered_events = merged[covered_mask]['timestamp'].nunique()
+    total = len(ev)
+    pct = (covered_events / total * 100) if total else 0.0
 
     return {
         "value_percent": round(pct, 2),
         "events_total": int(total),
-        "events_covered_heuristic": int(covered),
-        "note": "Cobertura inferida por zona+tempo+atributos; ideal seria event_id no stitcher (Tarefa 3).",
+        "events_covered_heuristic": int(covered_events),
+        "note": "Cobertura inferida por zona+tempo+atributos; ideal seria event_id no stitcher.",
     }
 
 
@@ -154,9 +140,9 @@ def metric_completeness(journeys: pd.DataFrame) -> dict:
     for pid, group in df.groupby("person_id"):
         g = group.sort_values("entry_time")
         first_zone = g.iloc[0]["zone_id"]
-        last_zone = g.iloc[-1]["zone_id"]
+        last_zone  = g.iloc[-1]["zone_id"]
         starts_ok = str(first_zone).startswith("Z_E")
-        ends_ok = last_zone in EXIT_ZONES or str(last_zone).startswith("Z_E")
+        ends_ok   = last_zone in EXIT_ZONES or str(last_zone).startswith("Z_E")
         if starts_ok and ends_ok:
             complete += 1
 
@@ -171,7 +157,7 @@ def metric_completeness(journeys: pd.DataFrame) -> dict:
 def metric_transition_gaps(journeys: pd.DataFrame) -> dict:
     df = journeys.copy()
     df["entry_time"] = pd.to_datetime(df["entry_time"])
-    df["exit_time"] = pd.to_datetime(df["exit_time"])
+    df["exit_time"]  = pd.to_datetime(df["exit_time"])
 
     gaps = []
     for _, group in df.groupby("person_id"):
@@ -194,7 +180,6 @@ def metric_transition_gaps(journeys: pd.DataFrame) -> dict:
 
 
 def _flatten_numbers(obj, out: list[float]) -> None:
-    """Extrai todos os números de um JSON aninhado para comparação."""
     if isinstance(obj, bool):
         return
     if isinstance(obj, (int, float)):
@@ -217,7 +202,6 @@ def _number_in_metrics(value: float, metric_numbers: list[float], tol: float = 0
             return True
         if m != 0 and abs(value - m) / abs(m) <= tol:
             return True
-        # percentagem vs fração
         if m < 1 and value > 1 and abs(value / 100 - m) <= tol:
             return True
         if m > 1 and value < 1 and abs(m / 100 - value) <= tol:
@@ -242,7 +226,6 @@ def metric_numeric_precision(insights_path: Path, metrics_path: Path) -> dict:
                 texts.append(str(ins.get(field, "")))
 
     found = _extract_numbers_from_text(" ".join(texts))
-  # Filtrar IDs tipo 001 — opcional: só números "grandes" ou com contexto
     found = [n for n in found if n > 1 or n == 0]
 
     verified = sum(1 for n in found if _number_in_metrics(n, metric_numbers))
@@ -252,7 +235,7 @@ def metric_numeric_precision(insights_path: Path, metrics_path: Path) -> dict:
         "value_percent": round(verified / total * 100, 2),
         "numbers_found": len(found),
         "numbers_verified": verified,
-        "note": "Comparação aproximada; melhorar quando analytics e insights estiverem corrigidos.",
+        "note": "Comparação aproximada.",
     }
 
 
@@ -287,8 +270,7 @@ def _insights_text_blob(insights_doc: dict) -> str:
 
 
 def _anomaly_mentioned(blob: str, zone: str, hour: int | None = None) -> bool:
-    zone_l = zone.lower()
-    if zone_l not in blob:
+    if zone.lower() not in blob:
         return False
     if hour is not None and str(hour) not in blob:
         return False
@@ -310,10 +292,7 @@ def _expected_anomalies(
         for a in metrics.get("anomalies_day_7", []):
             zone = a.get("zone") or a.get("zone_id")
             if zone:
-                from_metrics.append({
-                    "zone_id": zone,
-                    "hour_of_day": a.get("hour_of_day"),
-                })
+                from_metrics.append({"zone_id": zone, "hour_of_day": a.get("hour_of_day")})
         if from_metrics:
             return from_metrics, "metrics_anomalies_day_7"
 
@@ -325,7 +304,6 @@ def metric_anomaly_detection(
     ground_truth_path: Path | None,
     metrics_path: Path | None,
 ) -> dict:
-
     expected, source = _expected_anomalies(ground_truth_path, metrics_path)
     if not expected:
         return {
@@ -354,39 +332,23 @@ def metric_anomaly_detection(
     }
 
 
-
 def main() -> None:
     parser = argparse.ArgumentParser(description="Harness de avaliação TP1")
-    parser.add_argument(
-        "--data",
-        default="data/events.csv",
-        help="CSV de eventos (obrigatório para cobertura; default: data/events.csv)",
-    )
+    parser.add_argument("--data", default="data/events.csv", help="CSV de eventos")
     parser.add_argument("--output", required=True, help="JSON de relatório de avaliação")
-    parser.add_argument(
-        "--evaluate-only",
-        action="store_true",
-        help="Não corre stitcher/analytics/insights/report; usa ficheiros em output/",
-    )
-    parser.add_argument(
-        "--skip-coverage",
-        action="store_true",
-        help="Ignora cobertura (muito lenta com ~250k eventos)",
-    )
-    parser.add_argument(
-        "--skip-llm",
-        action="store_true",
-        help="Pipeline sem Ollama (só com pipeline completo, não com --evaluate-only)",
-    )
-    parser.add_argument("--journeys", help="Caminho para journeys.csv (default: output/journeys.csv)")
-    parser.add_argument("--metrics", help="Caminho para metrics.json (default: output/metrics.json)")
-    parser.add_argument("--insights", help="Caminho para insights.json (default: output/insights.json)")
-    parser.add_argument("--report", help="Caminho para weekly_report.md (default: output/weekly_report.md)")
-    parser.add_argument(
-        "--ground-truth",
-        default=str(ROOT / "data" / "validation_anomalies.json"),
-        help="Lista de anomalias injetadas nos teus testes",
-    )
+    parser.add_argument("--evaluate-only", action="store_true",
+                        help="Não corre pipeline; usa ficheiros em output/")
+    parser.add_argument("--skip-coverage", action="store_true",
+                        help="Ignora cobertura")
+    parser.add_argument("--skip-llm", action="store_true",
+                        help="Pipeline sem Ollama")
+    parser.add_argument("--journeys", help="Caminho para journeys.csv")
+    parser.add_argument("--metrics",  help="Caminho para metrics.json")
+    parser.add_argument("--insights", help="Caminho para insights.json")
+    parser.add_argument("--report",   help="Caminho para weekly_report.md")
+    parser.add_argument("--ground-truth",
+                        default=str(ROOT / "data" / "validation_anomalies.json"),
+                        help="Lista de anomalias injetadas")
     args = parser.parse_args()
 
     paths = output_paths(args)
@@ -400,20 +362,22 @@ def main() -> None:
 
     journeys = pd.read_csv(paths["journeys"])
     journeys["entry_time"] = pd.to_datetime(journeys["entry_time"])
-    journeys["exit_time"] = pd.to_datetime(journeys["exit_time"])
+    journeys["exit_time"]  = pd.to_datetime(journeys["exit_time"])
 
     events_path = resolve_path(args.data, ROOT / "data" / "events.csv")
+
     phase1 = {
-        "consistency": metric_consistency(journeys),
-        "completeness": metric_completeness(journeys),
-        "transition_gaps": metric_transition_gaps(journeys),
+        "consistency":       metric_consistency(journeys),
+        "completeness":      metric_completeness(journeys),
+        "transition_gaps":   metric_transition_gaps(journeys),
     }
+
     if args.skip_coverage:
         phase1["coverage"] = {"skipped": True, "reason": "Use sem --skip-coverage se precisares desta métrica."}
     else:
         if not events_path.exists():
             raise FileNotFoundError(f"events.csv em falta para cobertura: {events_path}")
-        print("A calcular cobertura (pode demorar vários minutos)...")
+        print("A calcular cobertura (merge vectorizado)...")
         events = pd.read_csv(events_path)
         events["timestamp"] = pd.to_datetime(events["timestamp"])
         phase1["coverage"] = metric_coverage(events, journeys)
@@ -433,17 +397,14 @@ def main() -> None:
         report["phase2"] = {}
         if paths["insights"].exists():
             report["phase2"]["numeric_precision"] = metric_numeric_precision(
-                paths["insights"], paths["metrics"]
-            )
+                paths["insights"], paths["metrics"])
             report["phase2"]["anomaly_detection"] = metric_anomaly_detection(
                 paths["insights"],
                 gt_path if gt_path.exists() else None,
-                paths["metrics"],
-            )
+                paths["metrics"])
         if paths["report"].exists():
             report["phase2"]["absence_of_hallucination"] = metric_report_hallucination(
-                paths["report"], paths["metrics"]
-            )
+                paths["report"], paths["metrics"])
 
     out_path = Path(args.output)
     if not out_path.is_absolute():

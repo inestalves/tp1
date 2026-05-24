@@ -158,6 +158,31 @@
     },
     "funnel": {
         "conversion_to_checkout": 0.8197228575272434,
+        "visitors_per_zone": {
+            "Z_C1": 8339,
+            "Z_C2": 8932,
+            "Z_C3": 6550,
+            "Z_CK": 3291,
+            "Z_E1": 4211,
+            "Z_E2": 4150,
+            "Z_N1": 1593,
+            "Z_N10": 2164,
+            "Z_N2": 1492,
+            "Z_N3": 1650,
+            "Z_N4": 1416,
+            "Z_N5": 2163,
+            "Z_N6": 1737,
+            "Z_N7": 1551,
+            "Z_N8": 1976,
+            "Z_N9": 1849,
+            "Z_S1": 1015,
+            "Z_S2": 567,
+            "Z_S3": 1323,
+            "Z_S4": 1016,
+            "Z_S5": 1410,
+            "Z_S6": 830,
+            "Z_S7": 721
+        },
         "non_checkout_profile": {
             "gender_dist": {
                 "F": 1340,
@@ -188,122 +213,384 @@
             "M_teenager": 76.57244732576986,
             "M_young_adult": 77.0811282740094
         },
+        "gender_by_hour": {
+            "9": {
+                "F": 210,
+                "M": 232
+            },
+            "10": {
+                "F": 482,
+                "M": 496
+            },
+            "11": {
+                "F": 788,
+                "M": 740
+            },
+            "12": {
+                "F": 903,
+                "M": 831
+            },
+            "13": {
+                "F": 855,
+                "M": 919
+            },
+            "14": {
+                "F": 631,
+                "M": 735
+            },
+            "15": {
+                "F": 559,
+                "M": 575
+            },
+            "16": {
+                "F": 717,
+                "M": 676
+            },
+            "17": {
+                "F": 903,
+                "M": 922
+            },
+            "18": {
+                "F": 805,
+                "M": 859
+            },
+            "19": {
+                "F": 756,
+                "M": 768
+            },
+            "20": {
+                "F": 416,
+                "M": 460
+            },
+            "21": {
+                "F": 83,
+                "M": 107
+            }
+        },
+        "age_range_by_hour": {
+            "9": {
+                "adult": 131,
+                "child": 23,
+                "middle_aged": 139,
+                "senior": 62,
+                "teenager": 20,
+                "young_adult": 67
+            },
+            "10": {
+                "adult": 343,
+                "child": 46,
+                "middle_aged": 277,
+                "senior": 109,
+                "teenager": 47,
+                "young_adult": 156
+            },
+            "11": {
+                "adult": 518,
+                "child": 64,
+                "middle_aged": 444,
+                "senior": 153,
+                "teenager": 92,
+                "young_adult": 257
+            },
+            "12": {
+                "adult": 560,
+                "child": 79,
+                "middle_aged": 509,
+                "senior": 186,
+                "teenager": 131,
+                "young_adult": 269
+            },
+            "13": {
+                "adult": 504,
+                "child": 76,
+                "middle_aged": 588,
+                "senior": 201,
+                "teenager": 100,
+                "young_adult": 305
+            },
+            "14": {
+                "adult": 419,
+                "child": 66,
+                "middle_aged": 443,
+                "senior": 99,
+                "teenager": 75,
+                "young_adult": 264
+            },
+            "15": {
+                "adult": 319,
+                "child": 47,
+                "middle_aged": 330,
+                "senior": 134,
+                "teenager": 83,
+                "young_adult": 221
+            },
+            "16": {
+                "adult": 421,
+                "child": 43,
+                "middle_aged": 404,
+                "senior": 141,
+                "teenager": 88,
+                "young_adult": 296
+            },
+            "17": {
+                "adult": 501,
+                "child": 62,
+                "middle_aged": 494,
+                "senior": 224,
+                "teenager": 179,
+                "young_adult": 365
+            },
+            "18": {
+                "adult": 533,
+                "child": 58,
+                "middle_aged": 536,
+                "senior": 165,
+                "teenager": 98,
+                "young_adult": 274
+            },
+            "19": {
+                "adult": 496,
+                "child": 62,
+                "middle_aged": 494,
+                "senior": 143,
+                "teenager": 62,
+                "young_adult": 267
+            },
+            "20": {
+                "adult": 297,
+                "child": 28,
+                "middle_aged": 288,
+                "senior": 69,
+                "teenager": 36,
+                "young_adult": 158
+            },
+            "21": {
+                "adult": 74,
+                "child": 5,
+                "middle_aged": 53,
+                "senior": 15,
+                "teenager": 11,
+                "young_adult": 32
+            }
+        },
         "top_drop_profile": "Adultos/Seniores"
     },
     "anomalies_day_7": [
         {
-            "zone": "Z_C1",
-            "value": 1403,
-            "deviation": "Alta"
-        },
-        {
             "zone": "Z_C2",
-            "value": 1545,
+            "hour": 21,
+            "value": 38,
+            "baseline_mean": 13.3,
             "deviation": "Alta"
         },
         {
-            "zone": "Z_C3",
-            "value": 1090,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_CK",
-            "value": 522,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_E1",
-            "value": 673,
+            "zone": "Z_C1",
+            "hour": 21,
+            "value": 31,
+            "baseline_mean": 11.8,
             "deviation": "Alta"
         },
         {
             "zone": "Z_E2",
-            "value": 721,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N1",
-            "value": 246,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N10",
-            "value": 342,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N2",
-            "value": 217,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N3",
-            "value": 268,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N4",
-            "value": 235,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N5",
-            "value": 346,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N6",
-            "value": 288,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N7",
-            "value": 254,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N8",
-            "value": 325,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_N9",
-            "value": 284,
+            "hour": 20,
+            "value": 47,
+            "baseline_mean": 30.0,
             "deviation": "Alta"
         },
         {
             "zone": "Z_S1",
-            "value": 151,
+            "hour": 14,
+            "value": 26,
+            "baseline_mean": 10.3,
             "deviation": "Alta"
         },
         {
-            "zone": "Z_S2",
-            "value": 102,
+            "zone": "Z_N1",
+            "hour": 14,
+            "value": 32,
+            "baseline_mean": 17.2,
             "deviation": "Alta"
         },
         {
-            "zone": "Z_S3",
-            "value": 217,
+            "zone": "Z_N8",
+            "hour": 14,
+            "value": 36,
+            "baseline_mean": 22.0,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N6",
+            "hour": 14,
+            "value": 32,
+            "baseline_mean": 18.8,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N9",
+            "hour": 19,
+            "value": 33,
+            "baseline_mean": 22.2,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_CK",
+            "hour": 21,
+            "value": 19,
+            "baseline_mean": 8.5,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_E2",
+            "hour": 10,
+            "value": 44,
+            "baseline_mean": 33.8,
             "deviation": "Alta"
         },
         {
             "zone": "Z_S4",
-            "value": 170,
+            "hour": 13,
+            "value": 26,
+            "baseline_mean": 15.8,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_C3",
+            "hour": 21,
+            "value": 18,
+            "baseline_mean": 8.0,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N1",
+            "hour": 13,
+            "value": 15,
+            "baseline_mean": 24.5,
+            "deviation": "Baixa"
+        },
+        {
+            "zone": "Z_S5",
+            "hour": 19,
+            "value": 27,
+            "baseline_mean": 17.8,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N3",
+            "hour": 19,
+            "value": 30,
+            "baseline_mean": 21.7,
             "deviation": "Alta"
         },
         {
             "zone": "Z_S5",
-            "value": 224,
-            "deviation": "Alta"
-        },
-        {
-            "zone": "Z_S6",
-            "value": 129,
+            "hour": 15,
+            "value": 23,
+            "baseline_mean": 14.7,
             "deviation": "Alta"
         },
         {
             "zone": "Z_S7",
-            "value": 106,
+            "hour": 14,
+            "value": 16,
+            "baseline_mean": 7.7,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_S5",
+            "hour": 20,
+            "value": 18,
+            "baseline_mean": 10.2,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N4",
+            "hour": 12,
+            "value": 27,
+            "baseline_mean": 20.2,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N4",
+            "hour": 10,
+            "value": 20,
+            "baseline_mean": 13.3,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N1",
+            "hour": 19,
+            "value": 25,
+            "baseline_mean": 18.5,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_E2",
+            "hour": 21,
+            "value": 11,
+            "baseline_mean": 5.2,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_S4",
+            "hour": 11,
+            "value": 9,
+            "baseline_mean": 14.7,
+            "deviation": "Baixa"
+        },
+        {
+            "zone": "Z_N3",
+            "hour": 17,
+            "value": 21,
+            "baseline_mean": 26.5,
+            "deviation": "Baixa"
+        },
+        {
+            "zone": "Z_S4",
+            "hour": 21,
+            "value": 7,
+            "baseline_mean": 1.6,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N4",
+            "hour": 18,
+            "value": 15,
+            "baseline_mean": 18.8,
+            "deviation": "Baixa"
+        },
+        {
+            "zone": "Z_N4",
+            "hour": 21,
+            "value": 6,
+            "baseline_mean": 2.4,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N3",
+            "hour": 21,
+            "value": 5,
+            "baseline_mean": 2.0,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_N9",
+            "hour": 21,
+            "value": 5,
+            "baseline_mean": 2.2,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_S3",
+            "hour": 21,
+            "value": 4,
+            "baseline_mean": 1.8,
+            "deviation": "Alta"
+        },
+        {
+            "zone": "Z_S2",
+            "hour": 21,
+            "value": 3,
+            "baseline_mean": 1.2,
             "deviation": "Alta"
         }
     ],
